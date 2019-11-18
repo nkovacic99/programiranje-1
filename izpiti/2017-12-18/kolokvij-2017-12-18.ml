@@ -4,28 +4,33 @@
 
 (* 1.1) Definirajte funkcijo, ki vzame tri cela števila ter vrne njihov produkt.
    Primer: /zmnozi 2 3 4 = 24/ *)
- let zmnozi = failwith "dopolni me"
+ let zmnozi x y z = x * y * z
 
 (* 1.2) Definirajte funkcijo, ki vzame celo število x in celo število k, ter
    vrne vrednost izraza x^3 + k.
    Primer: /afin_kub 2 1 = 9/ *)
- let afin_kub = failwith "dopolni me"
+ let afin_kub x k = x * x * x + k
 
 (* 1.3) Definirajte funkcijo, ki vzame seznam in izračuna seznam vrednosti funkcije
    f(x) = x^3 + 2 za elemente vhodnega seznama.
    Primer: /vse_kubiraj_in_pristej_dva [1; 2; 3] = [3; 10; 29]/ *)
- let vse_kubiraj_in_pristej_dva = failwith "dopolni me"
+ let rec vse_kubiraj_in_pristej_dva = function
+  | [] -> []
+  | x :: xs -> (x * x * x + 2) :: vse_kubiraj_in_pristej_dva xs
 
 (* 1.4) Definirajte funkcijo, ki varno vrne zadnji element seznama v primeru,
    da seznam ni prazen. Uporabite tip option.
    Primer: /zadnji_element [1; 2; 3] = Some 3/ *)
- let zadnji_element = failwith "dopolni me"
+ let rec zadnji_element sez = 
+  match sez with
+  | [] -> None
+  | x :: xs -> if xs = [] then Some x else zadnji_element xs
 
 (* 1.5) Definirajte funkcijo, ki izračuna n-to Fibonaccijevo število.
    Pri tem upoštevamo začetna pogoja /fibonacci 0 = 1/ in /fibonacci 1 = 1/.
    Primer: /fibonacci 20 = 10946/ *)
- let fibonacci = failwith "dopolni me"
-
+ let rec fibonacci n = 
+    if n <= 1 then 1 else fibonacci (n - 1) + fibonacci (n  - 2)
 (* ======================================= *)
 (* 2. naloga: podatkovni tipi in rekurzija *)
 (* ======================================= *)
@@ -35,7 +40,7 @@
    tipom /'a drevo/ z enim konstruktorjem, ki sprejme:
    - vrednost (koren) tipa /'a/ in
    - seznam (gozd) dreves tipa /'a drevo/. *)
-type 'a drevo = DopolniMe
+type 'a drevo = Rose of 'a * a' drevo list
 
 (* 2.2) Definirajte naslednja rožna drevesa:
 
@@ -46,13 +51,13 @@ type 'a drevo = DopolniMe
 
  *)
 
-let t = failwith "dopolni me"
-let t' = failwith "dopolni me"
-let t'' = failwith "dopolni me"
+let t = Rose(1, [])
+let t' = Rose(2, [t; t])
+let t'' = Rose(3, [Rose(-1, []); t'; Rose(0, [])]
 
 (* 2.3) Definirajte funkcijo, ki preveri ali je dano rožno drevo list drevesa,
    torej ima prazen gozd poddreves. *)
-let je_list = failwith "dopolni me"
+let je_list Rose (_, forest) = (forest = []) 
 
 (* 2.4) Definirajte funkcijo, ki preveri, ali drevo celih števil vsebuje zgolj pozitivna števila. *)
 let vsa_pozitivna = failwith "dopolni me"

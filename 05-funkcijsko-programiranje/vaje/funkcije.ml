@@ -30,7 +30,9 @@ let rec repeat x n = if n <= 0 then [] else x :: repeat x (n - 1)
  - : int list = [0; 1; 2; 3; 4; 5; 6; 7; 8; 9; 10]
 [*----------------------------------------------------------------------------*)
 
-let rec range num =
+let range num = 
+  let rec range' num acc =
+    if num <= 0 then acc else range' (num - 1) (num :: acc) in range' num []
   
 
 (*----------------------------------------------------------------------------*]
@@ -43,7 +45,9 @@ let rec range num =
  - : int list = [2; 3; 4; 5; 6]
 [*----------------------------------------------------------------------------*)
 
-let rec map = ()
+let rec map f = function
+  | [] -> []
+  | x :: xs -> f x :: map f xs
 
 (*----------------------------------------------------------------------------*]
  Funkcija [map_tlrec] je repno rekurzivna različica funkcije [map].
@@ -71,7 +75,12 @@ let rec map_tlrec = ()
  - : int list = [0; 1; 2; 5; 6; 7]
 [*----------------------------------------------------------------------------*)
 
-let rec mapi = ()
+let mapi f list = 
+  let rec mapi_aux list acc = 
+    match list with
+      | [] -> []
+      | x :: xs -> f acc x :: (mapi_aux xs (acc + 1))
+    in mapi_aux list 0
 
 (*----------------------------------------------------------------------------*]
  Funkcija [zip] sprejme dva seznama in vrne seznam parov istoležnih
@@ -83,8 +92,12 @@ let rec mapi = ()
  Exception: Failure "Different lengths of input lists.".
 [*----------------------------------------------------------------------------*)
 
-let rec zip = ()
-
+let rec zip list1 list2 = 
+  match list1, list2 with
+    | x :: xs, y :: ys -> (x, y) :: zip xs ys
+    | [], [] -> []
+    | [], _ -> failwith "seznama nista enakih dolžin"
+    | _, [] -> failwith "seznama nista enakih dolžin"
 (*----------------------------------------------------------------------------*]
  Funkcija [unzip] je inverz funkcije [zip], torej sprejme seznam parov
  [(x0, y0); (x1, y1); ...] in vrne par seznamov ([x0; x1; ...], [y0; y1; ...]).
@@ -93,8 +106,11 @@ let rec zip = ()
  - : int list * string list = ([0; 1; 2], ["a"; "b"; "c"])
 [*----------------------------------------------------------------------------*)
 
-let rec unzip = ()
-
+let rec unzip list = 
+  match list with
+    | [] -> ([], [])
+    | (x, y) :: tl -> let (list1, list2) = unzip tl in (x :: list1, y :: list2)
+  
 (*----------------------------------------------------------------------------*]
  Funkcija [unzip_tlrec] je repno rekurzivna različica funkcije [unzip].
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -153,7 +169,10 @@ let rec apply_sequence = ()
  - : int list = [4; 5]
 [*----------------------------------------------------------------------------*)
 
-let rec filter = ()
+let rec filter f list = 
+  match list with
+  | [] -> []
+  | x :: xs -> if f x then x :: filter f xs else filter f xs
 
 (*----------------------------------------------------------------------------*]
  Funkcija [exists] sprejme seznam in funkcijo, ter vrne vrednost [true] čim
@@ -166,7 +185,9 @@ let rec filter = ()
  - : bool = false
 [*----------------------------------------------------------------------------*)
 
-let rec exists = ()
+let rec exists f = function
+  | [] -> false
+  | x :: xs -> if f x then true else exists f xs
 
 (*----------------------------------------------------------------------------*]
  Funkcija [first f default list] vrne prvi element seznama, za katerega
@@ -179,4 +200,7 @@ let rec exists = ()
  - : int = 0
 [*----------------------------------------------------------------------------*)
 
-let rec first = ()
+let rec first f default list =
+  match list with
+  | [] -> default
+  | x :: xs -> if f x then x else first f default xs
