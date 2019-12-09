@@ -53,11 +53,13 @@ module type NAT = sig
 
   val eq   : t -> t -> bool
   val zero : t
-  (* Dodajte manjkajoče! *)
-  (* val to_int : t -> int *)
-  (* val of_int : int -> t *)
+  val to_int : t -> int
+  val of_int : int -> t
+  val one : t
+  val add : t -> t -> t
+  val multiply : t -> t -> t
+  val sub : t -> t -> t
 end
-
 (*----------------------------------------------------------------------------*]
  Napišite implementacijo modula [Nat_int], ki zgradi modul s signaturo [NAT],
  kjer kot osnovni tip uporablja OCamlov tip [int].
@@ -68,12 +70,16 @@ end
 [*----------------------------------------------------------------------------*)
 
 module Nat_int : NAT = struct
-
   type t = int
-  let eq x y = failwith "later"
-  let zero = 0
-  (* Dodajte manjkajoče! *)
 
+  let eq = (=)
+  let zero = 0
+  let one = 1
+  let to_int x = x
+  let of_int x = x
+  let add = (+)
+  let multiply = ( * )
+  let sub x y = max(x - y, 0)
 end
 
 (*----------------------------------------------------------------------------*]
@@ -92,9 +98,13 @@ module Nat_peano : NAT = struct
 
   type t = unit (* To morate spremeniti! *)
   let eq x y = failwith "later"
-  let zero = () (* To morate spremeniti! *)
-  (* Dodajte manjkajoče! *)
-
+  let zero = t
+  let one = t
+  let add = failwith "later"
+  let sub = failwith "later"
+  let muliply = failwith "later"
+  let to_int = failwith "later"
+  let of_int = failwith "later"
 end
 
 (*----------------------------------------------------------------------------*]
@@ -198,4 +208,4 @@ end
  - : unit = ()
 [*----------------------------------------------------------------------------*)
 
-let count (module Dict : DICT) list = ()
+(* let count (module Dict : DICT) list = () *)

@@ -2,7 +2,10 @@ import csv
 import os
 import re
 import requests
+<<<<<<< HEAD
 
+=======
+>>>>>>> 03672c860183d3d16067518d3dba04a2ddb858dc
 ###############################################################################
 # Najprej definirajmo nekaj pomožnih orodij za pridobivanje podatkov s spleta.
 ###############################################################################
@@ -24,7 +27,11 @@ def download_url_to_string(url):
     try:
         # del kode, ki morda sproži napako
         page_content = requests.get(url)
+<<<<<<< HEAD
     except Exception as e:
+=======
+    except 'TODO':
+>>>>>>> 03672c860183d3d16067518d3dba04a2ddb858dc
         # koda, ki se izvede pri napaki
         # dovolj je če izpišemo opozorilo in prekinemo izvajanje funkcije
         print(e)
@@ -41,7 +48,6 @@ def save_string_to_file(text, directory, filename):
     path = os.path.join(directory, filename)
     with open(path, 'w', encoding='utf-8') as file_out:
         file_out.write(text)
-    return None
 
 
 # Definirajte funkcijo, ki prenese glavno stran in jo shrani v datoteko.
@@ -50,8 +56,12 @@ def save_string_to_file(text, directory, filename):
 def save_frontpage(page, directory, filename):
     """Funkcija shrani vsebino spletne strani na naslovu "page" v datoteko
     "directory"/"filename"."""
+<<<<<<< HEAD
     page_data = download_url_to_string(page)
     save_string_to_file(page_data, directory, filename)
+=======
+    save_string_to_file(download_url_to_string(page), directory, filename)
+>>>>>>> 03672c860183d3d16067518d3dba04a2ddb858dc
 
 
 ###############################################################################
@@ -61,9 +71,15 @@ def save_frontpage(page, directory, filename):
 
 def read_file_to_string(directory, filename):
     """Funkcija vrne celotno vsebino datoteke "directory"/"filename" kot niz"""
+<<<<<<< HEAD
     full_path = os.path.join(directory, filename)
     with open(full_path, 'r', encoding='utf-8') as f:
         return f.read()
+=======
+    path = os.path.join(directory, filename)
+    with open(path, 'r', encoding='utf-8') as f:
+        return (f.read())
+>>>>>>> 03672c860183d3d16067518d3dba04a2ddb858dc
 
 
 # Definirajte funkcijo, ki sprejme niz, ki predstavlja vsebino spletne strani,
@@ -75,9 +91,14 @@ def read_file_to_string(directory, filename):
 def page_to_ads(page_content):
     """Funkcija poišče posamezne ogllase, ki se nahajajo v spletni strani in
     vrne njih seznam"""
+<<<<<<< HEAD
     exp = r'<div class="coloumn content">(.*?)<div class="clear">'
     return re.findall(exp, page_content, re.DOTALL)
 
+=======
+    iskalna_zahteva = re.compile(r'<div class="ad">(.*?)<div class="clear">',re.DOTALL)
+    return(re.findall(iskalna_zahteva, page_content))
+>>>>>>> 03672c860183d3d16067518d3dba04a2ddb858dc
 
 # Definirajte funkcijo, ki sprejme niz, ki predstavlja oglas, in izlušči
 # podatke o imenu, ceni in opisu v oglasu.
@@ -87,8 +108,14 @@ def get_dict_from_ad_block(block):
     """Funkcija iz niza za posamezen oglasni blok izlušči podatke o imenu, ceni
     in opisu ter vrne slovar, ki vsebuje ustrezne podatke
     """
-    raise NotImplementedError()
-
+    iskana_zahteva = re.compile(
+        r'title="(?P<ime>.*?)"'
+        r'.*?</h3>\s*(?P<opis>.*?)\s*</?div'
+        r'.*?class="price">(<span>)?(?P<cena>.*?)'
+        r'( €</span>)?</div', re.DOTALL)
+    oglasi = re.search(iskana_zahteva, block)
+    slovar_oglasov = oglasi.groupdict()
+    return slovar_oglasov
 
 # Definirajte funkcijo, ki sprejme ime in lokacijo datoteke, ki vsebuje
 # besedilo spletne strani, in vrne seznam slovarjev, ki vsebujejo podatke o
@@ -98,8 +125,10 @@ def get_dict_from_ad_block(block):
 def ads_from_file(filename, directory):
     """Funkcija prebere podatke v datoteki "directory"/"filename" in jih
     pretvori (razčleni) v pripadajoč seznam slovarjev za vsak oglas posebej."""
-    raise NotImplementedError()
-
+    seznam_slovarjev = list()
+    for oglas in page_to_ads(read_file_to_string(directory, filename)):
+        seznam_slovarjev.append(get_dict_from_ad_block(oglas))
+    return seznam_slovarjev
 
 ###############################################################################
 # Obdelane podatke želimo sedaj shraniti.
@@ -149,15 +178,21 @@ def main(redownload=True, reparse=True):
     3. Podatke shrani v csv datotekož
     """
     # Najprej v lokalno datoteko shranimo glavno stran
+<<<<<<< HEAD
     save_frontpage('http://www.bolha.com/zivali/male-zivali/macke/', cat_directory, frontpage_filename)
     # Iz lokalne (html) datoteke preberemo podatke
 
     content = read_file_to_string(cat_directory, frontpage_filename)
     print(page_to_ads(content)[-1])
+=======
+    save_string_to_file(download_url_to_string(cats_frontpage_url), cat_directory, frontpage_filename)    
+    # Iz lokalne (html) datoteke preberemo podatke
+    ads = page_to_ads(read_file_to_string(cat_directory, frontpage_filename))
+>>>>>>> 03672c860183d3d16067518d3dba04a2ddb858dc
     # Podatke prebermo v lepšo obliko (seznam slovarjev)
-
+    seznam_slovarjev = ads_from_file(frontpage_filename, cat_directory))
     # Podatke shranimo v csv datoteko
-
+    
     # Dodatno: S pomočjo parameteov funkcije main omogoči nadzor, ali se
     # celotna spletna stran ob vsakem zagon prense (četudi že obstaja)
     # in enako za pretvorbo
