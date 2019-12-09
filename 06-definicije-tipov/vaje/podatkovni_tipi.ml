@@ -20,7 +20,11 @@
  # dollar_to_euro (Dollar 0.5);;
  - : euro = Euro 0.4305
 [*----------------------------------------------------------------------------*)
+type euro = Euro of float
+type dollar = Dollar of float
 
+let dollar_to_euro (Dollar x) = Euro (x *. 0.861)
+let euro_to_dollar (Euro x) = Dollar (x *. 1.161)
 
 
 (*----------------------------------------------------------------------------*]
@@ -35,8 +39,13 @@
  - : currency = Pound 0.007
 [*----------------------------------------------------------------------------*)
 
+type currency = Yen of float | Pound of float | Krona of float
 
-
+let to_pound = function
+  | Pound x -> Pound x
+  | Yen x -> Pound 0.007
+  | Krona x -> Pound 0.085
+  
 (*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*]
  Želimo uporabljati sezname, ki hranijo tako cela števila kot tudi logične
  vrednosti. To bi lahko rešili tako da uvedemo nov tip, ki predstavlja celo
