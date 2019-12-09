@@ -10,6 +10,12 @@
 [*----------------------------------------------------------------------------*)
 
 
+let rec randlist len max =
+  if len <= 0 then
+    []
+  else
+    Random.int max :: (randlist (len-1) max)
+
 (*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*]
  Sedaj lahko s pomočjo [randlist] primerjamo našo urejevalno funkcijo (imenovana
  [our_sort] v spodnjem primeru) z urejevalno funkcijo modula [List]. Prav tako
@@ -35,13 +41,20 @@
  - : int list = [7]
 [*----------------------------------------------------------------------------*)
 
+let insert y xs = 
+    let rec insert_aux manjsi rest = 
+        match rest with
+        | [] -> List.rev (y :: manjsi)
+        | x :: xs when y < x -> List.rev_append (y :: manjsi) @ rest
+        | x :: xs -> insert_aux ([x] @ manjsi) xs
+    in insert_aux [] xs
 
 (*----------------------------------------------------------------------------*]
  Prazen seznam je že urejen. Funkcija [insert_sort] uredi seznam tako da
  zaporedoma vstavlja vse elemente seznama v prazen seznam.
 [*----------------------------------------------------------------------------*)
 
-
+let ins_sort list = List.fold_left (fun acc x -> insert x acc) [] list
 
 (*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*]
  Urejanje z Izbiranjem
