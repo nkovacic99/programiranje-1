@@ -22,6 +22,7 @@ let test_matrix =
      [| 7 ; 0 ; 1 |] |]
 
 let max_cheese cheese_matrix =
+(* podamo dolzini, da vemo, kje se ustavimo *)
   let dimx = Array.length cheese_matrix in
   let dimy = Array.length cheese_matrix.(0) in
   let rec best_path x y =
