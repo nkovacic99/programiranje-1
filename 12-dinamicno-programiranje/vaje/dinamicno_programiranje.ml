@@ -21,6 +21,11 @@ let test_matrix =
      [| 2 ; 4 ; 5 |];
      [| 7 ; 0 ; 1 |] |]
 
+let max_cheese cheese_matrix = 
+  let visina = Array.length cheese_matrix in
+  let dolzina = Array.length cheese_matrix(0) in 
+  let memo = Array.make_matrix visina dolzina 0 in
+  
 (*----------------------------------------------------------------------------*]
  Rešujemo problem sestavljanja alternirajoče obarvanih stolpov. Imamo štiri
  različne tipe gradnikov, dva modra in dva rdeča. Modri gradniki so višin 2 in
