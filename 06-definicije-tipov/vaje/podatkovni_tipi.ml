@@ -66,7 +66,12 @@ let to_pound = function
  Nato napišite testni primer, ki bi predstavljal "[5; true; false; 7]".
 [*----------------------------------------------------------------------------*)
 
+type intbool_list =
+  |Int of int * intbool_list
+  |Bool of bool*intbool_list
+  |Nil
 
+let test = Int(5, Bool(true, Bool(false, Int(7, Nil))))
 
 (*----------------------------------------------------------------------------*]
  Funkcija [intbool_map f_int f_bool ib_list] preslika vrednosti [ib_list] v nov
