@@ -158,7 +158,13 @@ let rec remove x = function
  - : bool = false
 [*----------------------------------------------------------------------------*)
 
-let rec is_palindrome = ()
+let is_palindrome sez =
+  let rec rev sez = 
+    match sez with
+      | x :: xs -> rev xs @ [x]
+        | [] -> []
+  in
+  sez = rev sez
 
 (*----------------------------------------------------------------------------*]
  Funkcija [max_on_components] sprejme dva seznama in vrne nov seznam, katerega
@@ -184,4 +190,10 @@ let rec max_on_components list1 list2 =
  - : int = 10
 [*----------------------------------------------------------------------------*)
 
-let rec second_largest = ()
+let second_largest list =
+  let rec largest = function
+    | [] -> failwith "List is too short."
+	  | x :: [] -> x
+	  | x :: xs -> max x (largest xs)
+  in
+  largest (delete (largest list) list)
