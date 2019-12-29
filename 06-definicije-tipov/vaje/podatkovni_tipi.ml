@@ -73,20 +73,29 @@ type intbool_list =
 
 let test = Int(5, Bool(true, Bool(false, Int(7, Nil))))
 
-(*----------------------------------------------------------------------------*]
+(*-------------------------------------------- --------------------------------*]
  Funkcija [intbool_map f_int f_bool ib_list] preslika vrednosti [ib_list] v nov
  [intbool_list] seznam, kjer na elementih uporabi primerno od funkcij [f_int]
  oz. [f_bool].
 [*----------------------------------------------------------------------------*)
 
-let rec intbool_map = ()
+let rec intbool_map f_int f_bool = function
+  |Int(x, xs) -> Int(f_int x, intbool_map f_int f_bool xs)
+  |Bool(x, xs) -> Bool(f_bool, intbool_map f_int f_bool xs)
+  |Nil -> Nil
 
 (*----------------------------------------------------------------------------*]
  Funkcija [intbool_reverse] obrne vrstni red elementov [intbool_list] seznama.
  Funkcija je repno rekurzivna.
 [*----------------------------------------------------------------------------*)
 
-let rec intbool_reverse = ()
+let intbool_reverse ib_list = 
+  let rec intbool_rev' acc = function
+    |Int(x, xs) -> intbool_rev' (Int(x, acc)) xs
+    |Bool(x, xs) -> intbool_rev' (Bool(x, acc)) xs
+    |Nil -> acc
+  in intbool_rev' Nil ib_list
+
 
 (*----------------------------------------------------------------------------*]
  Funkcija [intbool_separate ib_list] loči vrednosti [ib_list] v par [list]
@@ -94,7 +103,12 @@ let rec intbool_reverse = ()
  vrednosti. Funkcija je repno rekurzivna in ohranja vrstni red elementov.
 [*----------------------------------------------------------------------------*)
 
-let rec intbool_separate = ()
+let rec intbool_separate ib_list =
+  let rec intbool_separate' iacc bacc = function
+    |Int(x, xs) -> intbool_separate' (x :: iacc) bacc xs
+    |Bool(x, xs) -> intbool_separate' iacc (x :: bacc) xs
+    |Nil -> (iacc, bacc)
+  in intbool_separate' [] []
 
 (*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*]
  Določeni ste bili za vzdrževalca baze podatkov za svetovno priznano čarodejsko
@@ -111,8 +125,9 @@ let rec intbool_separate = ()
  raziskovanje oz. historian, teacher in researcher. Definirajte tip
  [specialisation], ki loči med temi zaposlitvami.
 [*----------------------------------------------------------------------------*)
+type magic = Fire | Frost | Arcane
 
-
+type specialisation = Historian | Teacher | Researcher
 
 (*----------------------------------------------------------------------------*]
  Vsak od čarodejev začne kot začetnik, nato na neki točki postane študent,
@@ -128,8 +143,12 @@ let rec intbool_separate = ()
  # professor;;
  - : wizard = {name = "Matija"; status = Employed (Fire, Teacher)}
 [*----------------------------------------------------------------------------*)
+type status = 
+  |Newbie
+  |Student of magic * int
+  |Employed of magic * specialisation
 
-
+type wizard = {name: string; status: status}
 
 (*----------------------------------------------------------------------------*]
  Želimo prešteti koliko uporabnikov posamezne od vrst magije imamo na akademiji.
@@ -141,7 +160,12 @@ let rec intbool_separate = ()
  # update {fire = 1; frost = 1; arcane = 1} Arcane;;
  - : magic_counter = {fire = 1; frost = 1; arcane = 2}
 [*----------------------------------------------------------------------------*)
+type magic_counter = {fire: int; frost: int; arcane: int}
 
+let update counter = function
+  | Fire -> {counter with fire = counter.fire + 1}
+  | Frost -> {counter with frost = counter.frost + 1}
+  | Arcane -> {counter with arcane = counter.arcane + 1}
 
 
 (*----------------------------------------------------------------------------*]
@@ -152,7 +176,7 @@ let rec intbool_separate = ()
  - : magic_counter = {fire = 3; frost = 0; arcane = 0}
 [*----------------------------------------------------------------------------*)
 
-let rec count_magic = ()
+let rec count_magic list_mag  = ()
 
 (*----------------------------------------------------------------------------*]
  Želimo poiskati primernega kandidata za delovni razpis. Študent lahko postane
