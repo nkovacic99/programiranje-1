@@ -8,7 +8,8 @@ let reverse list =
   let rec reverse_aux acc = function
     | [] -> acc
     | x :: xs -> reverse_aux (x :: acc) xs
-  in reverse_aux [] list
+  in reverse_aux [] list 
+
 (*----------------------------------------------------------------------------*]
  Funkcija [repeat x n] vrne seznam [n] ponovitev vrednosti [x]. Za neprimerne
  vrednosti [n] funkcija vrne prazen seznam.
@@ -57,8 +58,12 @@ let rec map f = function
  - : int list = [2; 3; 4; 5; 6]
 [*----------------------------------------------------------------------------*)
 
-let rec map_tlrec = ()
-
+let map_tlrec f list = 
+  let rec map_tlrec' list acc = 
+    match list with
+      | [] -> acc
+      | x :: xs -> map_tlrec' xs (f x :: acc)
+  in map_tlrec' list []
 (*----------------------------------------------------------------------------*]
  Funkcija [mapi] je ekvivalentna python kodi:
 
@@ -118,7 +123,7 @@ let rec unzip list =
  - : int list * string list = ([0; 1; 2], ["a"; "b"; "c"])
 [*----------------------------------------------------------------------------*)
 
-let rec unzip_tlrec = ()
+let unzip_tlrec list = ()
 
 (*----------------------------------------------------------------------------*]
  Funkcija [loop condition f x] naj se izvede kot python koda:
@@ -133,7 +138,7 @@ let rec unzip_tlrec = ()
  - : int = 12
 [*----------------------------------------------------------------------------*)
 
-let rec loop = ()
+let rec loop condition f x = if condition x then loop condition f (f x) else x
 
 (*----------------------------------------------------------------------------*]
  Funkcija [fold_left_no_acc f list] sprejme seznam [x0; x1; ...; xn] in
@@ -145,7 +150,10 @@ let rec loop = ()
  - : string = "FICUS"
 [*----------------------------------------------------------------------------*)
 
-let rec fold_left_no_acc = ()
+let rec fold_left_no_acc f = function
+  | [] | _ :: [] -> failwith "List is too short."
+  | x :: y :: [] -> f x y
+  | x :: y :: tl -> fold_left_no_acc f ((f x y) :: tl)
 
 (*----------------------------------------------------------------------------*]
  Funkcija [apply_sequence f x n] vrne seznam zaporednih uporab funkcije [f] na
@@ -158,8 +166,6 @@ let rec fold_left_no_acc = ()
  # apply_sequence (fun x -> x * x) 2 (-5);;
  - : int list = []
 [*----------------------------------------------------------------------------*)
-
-let rec apply_sequence = ()
 
 (*----------------------------------------------------------------------------*]
  Funkcija [filter f list] vrne seznam elementov [list], pri katerih funkcija [f]

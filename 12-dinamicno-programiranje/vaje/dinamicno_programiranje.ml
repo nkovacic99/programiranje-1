@@ -21,6 +21,18 @@ let test_matrix =
      [| 2 ; 4 ; 5 |];
      [| 7 ; 0 ; 1 |] |]
 
+let max_cheese cheese_matrix =
+(* podamo dolzini, da vemo, kje se ustavimo *)
+  let dimx = Array.length cheese_matrix in
+  let dimy = Array.length cheese_matrix.(0) in
+  let rec best_path x y =
+    let current_cheese = cheese_matrix.(x).(y) in
+    let best_right = if (x+1 = dimx) then 0 else best_path (x+1) y in
+    let best_down = if (y+1 = dimy) then 0 else best_path x (y+1) in
+    current_cheese + max best_right best_down
+  in
+  best_path 0 0
+
 (*----------------------------------------------------------------------------*]
  Rešujemo problem sestavljanja alternirajoče obarvanih stolpov. Imamo štiri
  različne tipe gradnikov, dva modra in dva rdeča. Modri gradniki so višin 2 in
