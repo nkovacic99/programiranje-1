@@ -18,3 +18,4 @@ let rec najvecja_globina = function
   | Element _ :: xs -> najvecja_globina xs
   | Podseznam podsez :: xs ->
       max (najvecja_globina podsez + 1) (najvecja_globina xs)
+      
