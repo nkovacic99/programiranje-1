@@ -42,7 +42,7 @@
    tipom /'a drevo/ z enim konstruktorjem, ki sprejme:
    - vrednost (koren) tipa /'a/ in
    - seznam (gozd) dreves tipa /'a drevo/. *)
-type 'a drevo = DopolniMe
+type 'a drevo = Rose of 'a * 'a drevo list
 
 (* 2.2) Definirajte naslednja rožna drevesa:
 
@@ -53,21 +53,21 @@ type 'a drevo = DopolniMe
 
  *)
 
-let t = failwith "dopolni me"
-let t' = failwith "dopolni me"
-let t'' = failwith "dopolni me"
+let t = Rose(1, [])
+let t' = Rose(2, [t; t])
+let t'' = Rose(3, [Rose(-1, []); t; Rose(0, [])])
 
 (* 2.3) Definirajte funkcijo, ki vrne gozd rožnega drevesa. *)
-let vrni_gozd = failwith "dopolni me"
+let vrni_gozd (Rose(_, ls)) = ls
 
 (* 2.4) Definirajte funkcijo, ki izpiše vse vrednosti v rožnem drevesu celih števil.
    Števila naj bodo v ločenih vrsticah. Uporabite (print_int : int -> unit) in
    (print_newline : unit -> unit). *)
-let izpisi_vrednosti = failwith "dopolni me"
+let rec izpisi_vrednosti drevo = ()
+
 
 (* 2.5) Definirajte funkcijo, ki izračuna globino rožnega drevesa, t.j. dolžino
    najdaljše poti od korena do lista. *)
-let globina = failwith "dopolni me"
 
 (* 2.6) Definirajte funkcijo, ki sestavi (poljubno) rožno drevo globine n.
    Vrednosti v korenih so poljubne. *)

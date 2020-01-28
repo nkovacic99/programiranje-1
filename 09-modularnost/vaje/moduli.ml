@@ -53,13 +53,14 @@ module type NAT = sig
 
   val eq   : t -> t -> bool
   val zero : t
-  val to_int : t -> int
-  val of_int : int -> t
-  val one : t
-  val add : t -> t -> t
-  val multiply : t -> t -> t
-  val sub : t -> t -> t
+  val one  : t
+  val add  : t -> t -> t
+  val sub  : t -> t -> t
+  val mul  : t -> t -> t
+  val from_int : int -> t
+  val to_int   : t -> int
 end
+
 (*----------------------------------------------------------------------------*]
  Napišite implementacijo modula [Nat_int], ki zgradi modul s signaturo [NAT],
  kjer kot osnovni tip uporablja OCamlov tip [int].
@@ -70,16 +71,17 @@ end
 [*----------------------------------------------------------------------------*)
 
 module Nat_int : NAT = struct
-  type t = int
 
+  type t = int
   let eq = (=)
   let zero = 0
   let one = 1
-  let to_int x = x
-  let of_int x = x
   let add = (+)
-  let multiply = ( * )
-  let sub x y = max(x - y, 0)
+  let sub x y = max 0 (x - y)
+  let mul = ( * )
+  let from_int n = n
+  let to_int i = i
+
 end
 
 (*----------------------------------------------------------------------------*]
@@ -96,15 +98,42 @@ end
 
 module Nat_peano : NAT = struct
 
-  type t = unit (* To morate spremeniti! *)
-  let eq x y = failwith "later"
-  let zero = t
-  let one = t
-  let add = failwith "later"
-  let sub = failwith "later"
-  let muliply = failwith "later"
-  let to_int = failwith "later"
-  let of_int = failwith "later"
+  type t = Zero | S of t (*successor of t*)
+
+  let rec eq x y =
+    match (x, y) with
+    | (Zero, Zero) -> true
+    | (S x, S y) -> eq x y
+    | _ -> false
+  
+  let zero = Zero
+  
+  let one = S Zero
+  
+  let rec add x = function
+    | Zero -> x
+    | S y -> S (add x y)
+  
+  let rec sub x y =
+    match (x, y) with
+    | (_, Zero) -> x
+    | (Zero, _) -> Zero
+    | (S x, S y) -> sub x y
+  
+  let rec mul x y =
+    match x with
+    | Zero -> Zero
+    | S x -> add y (mul x y)
+  
+  let rec from_int i =
+    if i <= 0
+    then Zero
+    else S (from_int (i-1))
+  
+  let rec to_int = function
+    | Zero -> 0
+    | S n -> 1 + (to_int n)
+
 end
 
 (*----------------------------------------------------------------------------*]
